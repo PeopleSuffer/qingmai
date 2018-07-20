@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="swiper/css/swiper.css">
+	<link rel="stylesheet" href="css/style.css?v=2"/>
+	<link rel="stylesheet" href="css/index.css"/>
+	<link rel="stylesheet" href="../admin/src/css/layui.css">
+	<style>
+
+		.yourclass{top:75%!important;}
+		.buy_number {margin: 1.42rem 0.8rem 0 0.8rem;}
+		.btn-buy-now1 {
+			right: 0;
+			color: #fff;
+			background-color: #d73940;
+			width: 100%;
+			border-radius: .05333333333333334rem;
+			font-size: 14px;
+			position: absolute;
+			top: 19%;
+			height: .96rem;
+			line-height: .96rem;
+			text-align: center;
+		}
+		#goods_detail{
+			padding: 10px 10px 10px 10px;
+		}
+	</style>
+</head>
+<body class="bg">
+	<div class="wrapper">
+		<div class="detail_content">
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+
+				</div>
+				<!-- Add Pagination -->
+				<div class="swiper-pagination"></div>
+			</div>
+			<div class="detail_info clearfix">
+				<p id="goods_name"></p>
+				<strong id="goods_price"></strong>
+				<strong id="goods_cx_price" style="color: #b3b3b3;text-decoration: line-through;"></strong>
+				<span>已售:<i id="sellNumber"></i></span>
+			</div>
+			<div class="send_info">
+			<!--<p>成都: <strong>成都</strong></p>-->
+		</div>
+			<!--<div class="detail_table" id="goods_detail">
+
+			</div>-->
+			<div class="detail_list">
+				<ul class="clearfix">
+					<li class="active"><span>产品详情</span></li>
+					<li><span>评价</span></li>
+				</ul>
+			</div>
+			<div class="detail_table">
+				<ul>
+					<li id="goods_detail">
+
+					</li>
+					<li style="display:none;" id="pingjia">
+
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="buy_number clearfix" style="display:none;">
+			<div class="buy_name">购买数量</div>
+			<div class="buy_total">
+				<span class="reduce"   onclick="reduce(this)">-</span>
+				<input type="text" class="txt" value="1" />
+				<span class="add"     onclick="add(this)">+</span>
+				<a class="btn-buy-now1" data-spider-action-name="立即购买" shippingId=""  href="javascript:;">去结算</a>
+			</div>
+		</div>
+		<footer class="m-footer" id="J_Footer" data-spider="phmjpxpqfr">
+			<div class="wrap">
+				<div class="options">
+					<div class="options-l">
+						<a class="go-shop" data-spider="" data-spider-mode="none" href="shopCart.html?m=26" id="J_GoShopBtn">
+							<i></i>购物车
+						</a>
+					</div>
+					<div class="options-r">
+							<a class="btn-add-cart" data-spider-action-name="加入购物车" spm-auto="加入购物车" href="javascript:;">加入购物车</a>
+							<a class="btn-buy-now"  href="javascript:;">立即购买</a>
+					</div>
+				</div>
+			</div>
+
+		</footer>
+	</div>
+</body>
+<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="js/init.js"></script>
+<script src="swiper/js/swiper.min.js"></script>
+<script src="../admin/src/layui.js"></script>
+<script type="text/javascript">
+	swiper1 = new Swiper('.swiper-container', {
+		initialSlide :0,
+		observer:true,//修改swiper自己或子元素时，自动初始化swiper
+		observeParents:true//修改swiper的父元素时，自动初始化swiper
+	});
+$(".detail_list ul").children("li").on("click",function(){
+	var index = $(this).index();
+	$(this).addClass("active").siblings().removeClass("active");
+	$(".detail_table ul").children("li").eq(index).show().siblings().hide();
+})
+layui.use('layer', function(){
+	var url = "/qingmai/product/detail.do";
+	var productId = GetQueryString("goods_id")
+	$.post(url,{productId:productId},function(result){
+		//layer.msg(result.msg);
+		console.log(result)
+		if(result.code == 1){
+			layer.msg(result.msg);
+			setTimeout(function(){
+				 window.history.go(-1);
+			},1500)
+		}else{
+			var jiage = result.data.disprice?result.data.disprice:result.data.price;
+			$("#goods_name").text(result.data.name);
+			$("title").html('青脉-'+result.data.name);
+			$("#goods_price").text('￥'+jiage+'元');
+			$("#goods_detail").html(result.data.detail);
+			$("#sellNumber").text(result.data.sellNumber);
+
+			if(result.data.disprice){
+				$("#goods_cx_price").text('￥'+result.data.price+'元');
+			}
+
+			var apply = result.data.special?result.data.special:1;
+
+			$(".btn-buy-now").attr("apply",apply);
+			var images = result.data.images;
+			if(images){
+				for(var i=0;i<images.length; i++){
+					var str ='<div class="swiper-slide"><img src="'+images[i]+'" width="100%"/></div>';
+					$(".swiper-wrapper").append(str);
+				}
+			}
+			var commentListVo=result.data.commentListVo;
+			//console.log(result.data.commentListVo)
+			if(commentListVo){
+				for(var i=0;i<commentListVo.length; i++){
+					var pj='<div style="border-bottom: 1px solid #737373;margin-top: 5px;">' +
+							'<p style="font-size: 0.4rem;padding: 10px 5px 5px 25px;">'+commentListVo[i].content+'</p> ' +
+							'<p style="padding: 10px 5px 5px 25px;font-size: 0.4rem;">'+commentListVo[i].userName+'</p> ' +
+							'</div>';
+					$("#pingjia").append(pj);
+				}
+			}
+
+
+
+		}
+		//console.log(result)
+	})
+	$(".btn-add-cart").click(function(){
+		var url = "/qingmai/cart/add.do";
+		$.post(url,{productId:productId,count:1},function(result){
+			//layer.msg(result.code);
+			if(result.code==0){
+			//console.log(result)
+				layer.msg("加入购物车成功");
+			}else{
+				layer.msg(result.msg);
+			}
+			//console.log(result)
+		})
+	})
+	var url_m = "/qingmai/user/get_user_info.do";
+	$.post(url_m,{},function(result){
+		if(result.code == 0){
+			var shipping = result.data.shippingId;
+			var shippingId = shipping ? shipping : -1;
+			$(".btn-buy-now1").attr("shippingId",shippingId);
+		}else {
+			layer.msg(result.msg);
+			setTimeout(function(){
+				window.location.href="/qingmai/app";
+			},1500)
+		}
+
+	})
+	$(".btn-buy-now").click(function () {
+		layer.open({
+			type: 1,
+			shade: false,
+			title: false,
+			skin: 'yourclass',
+			area: ['100%', '100%'], //宽高
+			content: $(".buy_number")
+		});
+	})
+	$(".btn-buy-now1").click(function(){
+		var shippingId = $(".btn-buy-now1").attr("shippingId");
+		var count = $(".txt").val();
+		//console.log(count)
+		var url = "/qingmai/order/immediately_order.do";
+		$.post(url,{productId:productId,count:count,shippingId:shippingId},function(result){
+			//layer.msg(result.code);
+			if(result.code==0){
+				console.log(result)
+				window.location.href="buy.html?orderNo="+result.data.orderNo;
+			}else{
+				layer.msg(result.msg);
+			}
+			//console.log(result)
+		})
+	})
+})
+
+	/*点击加一*/
+	function add(obj){
+		$(obj).siblings('.txt').val(parseInt($(obj).siblings('.txt').val())+1);
+	}
+	/*点击减一*/
+	function reduce(obj){
+		if($(obj).siblings('.txt').val()==0){
+			$(obj).siblings('.txt').val(0);
+		}else{
+			$(obj).siblings('.txt').val(parseInt($(obj).siblings('.txt').val())-1);
+		}
+	}
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+</script>
+</html>

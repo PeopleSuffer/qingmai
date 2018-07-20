@@ -1,0 +1,88 @@
+@charset "utf-8";
+/****
+project_name:盈科资本
+project_date: 2018年3月7日
+developer:wanzhongwen
+contanct_message: 401034680@qq.com
+=========================================================================
+/******css reset******/
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre,
+form, fieldset, legend, button, input, textarea, th, td {
+	margin: 0;
+	padding: 0;
+}
+body, button, input, select, textarea {
+	font: 12px/1.5 "Microsoft Yahei", arial, \5b8b\4f53;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+}
+address, cite, dfn, em, var {
+	font-style: normal;
+}
+code, kbd, pre, samp {
+	font-family: courier new, courier, monospace;
+}
+small {
+	font-size: 12px;
+}
+ul, ol {
+	list-style: none;
+}
+a {
+	text-decoration: none;
+}
+strong{
+	font-weight:normal;
+}
+a:hover {
+	text-decoration: none;
+}
+sup {
+	vertical-align: text-top;
+}
+sub {
+	vertical-align: text-bottom;
+}
+legend {
+	color: #000;
+}
+fieldset, img {
+	border: 0;
+}
+button, input, select, textarea {
+	font-size: 100%;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+input{
+	border: 0;
+	box-shadow:0px 0px 0px rgba(0,0,0,0);
+	-webkit-appearance:none;
+	opacity:1;
+}
+textarea,select{
+	border: 0;
+	-webkit-appearance: none;
+}
+.clearfix::after{
+	display:block;
+	content:"";
+	visibility: hidden;
+	height:0;
+	clear:both;
+}
+input::-webkit-input-placeholder{
+	color:#D7D7DE;
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+	color:#D7D7DE;
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+	color:#D7D7DE;
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
+	color:#D7D7DE;
+}

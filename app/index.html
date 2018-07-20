@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>青脉-首页</title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="swiper/css/swiper.css">
+	<link rel="stylesheet" href="css/style.css?v=2"/>
+</head>
+<body class="bg">
+	<div class="wrapper" style="overflow:auto;">
+		<div class="swiper-container">
+			<div class="swiper-wrapper" id="lb">
+			</div>
+			<!-- Add Pagination -->
+			<div class="swiper-pagination"></div>
+		</div>
+		<div class="shop_content">
+			<ul class="clearfix" id="goods_list">
+			
+			</ul>
+		</div>
+		<div class="line"></div>
+		
+		<footer class="footer">
+			<ul class="clearfix">
+				<li>
+					<a href="index.html" class="active">
+						<span class="icon home_icon active"></span>
+						<strong>首页</strong>
+					</a>
+				</li>
+				<li>
+					<a href="friend.html" class="">
+						<span class="icon friend_icon"></span>
+						<strong>圈子</strong>
+					</a>
+				</li>
+				<li>
+					<a href="person.html" class="">
+						<span class="icon my_icon"></span>
+						<strong>我的</strong>
+					</a>
+				</li>
+			</ul>
+		</footer>
+	</div>
+</body>
+<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="js/init.js"></script>
+<script src="swiper/js/swiper.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript">
+	var  code  = GetQueryString('code');
+	var weixn = "/qingmai/user/getFirstUrl.do";
+	var login = "/qingmai/user/login.do";
+	if(code!=""){
+		$.get(login,{code:code},function(result){
+			console.log(result)
+		})
+		$.post("/qingmai/user/get_user_info.do",{},function(result){
+			//console.log(result)
+			if(result.code == 1){
+				$.get(weixn,{},function(data){
+					console.log(data)
+					window.location.href=data.data;
+				})
+			}
+		})
+	}
+
+	var swiper = new Swiper('.swiper-container', {
+		pagination: {
+			el: '.swiper-pagination',
+			clickable: true,
+		},
+		initialSlide :0,
+		observer:true,//修改swiper自己或子元素时，自动初始化swiper
+		observeParents:true//修改swiper的父元素时，自动初始化swiper
+	});
+	var page =1;
+	var limit =100;
+	var str="";
+	var url = "/qingmai/product/list.do";
+	var url_lb = "/qingmai/product/rollAdvertisement.do";
+	$.post(url,{page:page,limit:limit},function(result){
+		$.each(result.data, function(name, value) {
+			var	li ='<li>'+
+					'<a href="detail.html?goods_id='+value.id+'">'+
+						'<img src="'+value.mainImage+'" alt="产品图片"/>'+
+						'<p>'+value.name+'</p>'+
+						'<strong>￥'+value.price+'元</strong>'+
+					'</a>'+
+				'</li>';
+			$("#goods_list").append(li)
+		});
+	})
+	$.post(url_lb,{},function(result){
+		$.each(result.data, function(name, value) {
+			str +='<div class="swiper-slide"><a href="detail.html?goods_id='+value.id+'"><img src="'+value.advertiseImage+'" width="100%"/></a></div>';
+		});
+		$("#lb").append(str)
+	})
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null)return  unescape(r[2]); return null;
+	}
+</script>
+</html>

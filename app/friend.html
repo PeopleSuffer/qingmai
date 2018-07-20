@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>青脉-我的朋友</title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="css/swiper.css?v=3"/>
+	<link rel="stylesheet" href="css/style.css?v=8"/>
+	<link rel="stylesheet" href="css/style1.css?v=8"/>
+	<link href="css/blogDetail.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/mobile.app.6502f50ea01dd55160db.css">
+	<link rel="stylesheet" type="text/css" href="uploder/webuploader.css" />
+	<link rel="stylesheet" type="text/css" href="uploder/style.css" />
+
+</head>
+<style>
+	.swiper-container {
+		width: 100%;
+		height: 100%;
+	}
+	.swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		background: #000;
+		/* Center slide text vertically */
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+	}
+    .yq-blog-detail .footer-detail .opt-btn1 {
+        margin-left: 10px;
+        line-height: 33px;
+        background: #e9e9e9;
+        padding: 0 14px;
+        cursor: pointer;
+        color: #999;
+        font-size: 14px;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+	.warning {
+		height: 2vh;
+	}
+	.warning {
+		position: relative;
+		background-color: #6DA807;
+		border: 1px solid #6DA807;
+		border-radius: 10px;
+		box-shadow: 1vw 3vh 10vh rgba(109, 168, 7, 0.8);
+		background-size: 3em 3em;
+		background-image: linear-gradient(-45deg, transparent 0em, transparent 0.8em, #96D923 0.9em, #96D923 2.1em, transparent 2.1em, transparent 2.9em, #96D923 3.1em);
+		-webkit-animation: warning-animation 750ms infinite linear;
+		-moz-animation: warning-animation 750ms infinite linear;
+		animation: warning-animation 750ms infinite linear;
+	}
+	.warning:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 100%;
+		border-radius: 10px;
+		background-image: linear-gradient(to bottom, #6DA807, rgba(171, 226, 77, 0.6) 15%, transparent 60%, #6DA807);
+	}
+
+	@-webkit-keyframes warning-animation {
+		0% {
+			background-position: 0 0;
+		}
+		100% {
+			background-position: 3em 0;
+		}
+	}
+	@-moz-keyframes warning-animation {
+		0% {
+			background-position: 0 0;
+		}
+		100% {
+			background-position: 3em 0;
+		}
+	}
+	@keyframes warning-animation {
+		0% {
+			background-position: 0 0;
+		}
+		100% {
+			background-position: 3em 0;
+		}
+	}
+</style>
+<body>
+<div class="wrapper">
+	<div  style="height: 35px;">
+		<button class="Button VoteButton VoteButton--up" id="add_dongtai" type="button" style="float: right">发布动态</button>
+	</div>
+
+	<div class="friend_content">
+		<ul class="clearfix yq-blog-detail" id ="clearfix">
+			
+		</ul>
+	</div>
+	<form id="form">
+		<div id="add" style="display: none;">
+			<textarea id="name" style="width: 95%;height:5.5rem;border: 1px solid #f5f5f5; padding: 0.2rem 0.2rem 0.2rem 0.2rem"></textarea>
+			<div class="address_add" style="border-top: 0;">
+				<!--<ul class="clearfix">
+					<li>
+						<a href="javascript:;" class="photo_area">
+						</a>
+						<img onclick="getElementById('file').click()" class="photo_add" style="cursor:pointer;" src="images/order/add_photo.png"/>
+						<input type="file" multiple="multiple" id="file"  style="height:0;width:0;z-index: -1; position: absolute;left: 10px;top: 5px;"/>
+					</li>
+				</ul>-->
+				<div id="wrapper">
+					<div id="container">
+						<!--头部，相册选择和格式选择-->
+						<div id="uploader">
+							<div class="queueList">
+								<div id="dndArea" class="placeholder">
+									<div id="filePicker"></div>
+								</div>
+							</div>
+							<div class="statusBar" style="display:none;">
+								<div class="progress">
+									<span class="text">0%</span>
+									<span class="percentage"></span>
+								</div><div class="info"></div>
+								<div class="btns">
+									<div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="warning" style="display: none" id="jdt"></div>
+			<input class="submit_btn" type="button" style="float: right;" id="sub_btn" value="发表动态">
+		</div>
+	</form>
+
+	<footer class="footer">
+		<ul class="clearfix">
+			<li>
+				<a href="index.html">
+					<span class="icon home_icon"></span>
+					<strong>首页</strong>
+				</a>
+			</li>
+			<li>
+				<a href="friend.html" class="active">
+					<span class="icon friend_icon"></span>
+					<strong>圈子</strong>
+				</a>
+			</li>
+			<li>
+				<a href="person.html" class="">
+					<span class="icon my_icon"></span>
+					<strong>我的</strong>
+				</a>
+			</li>
+		</ul>
+	</footer>
+</div>
+
+
+<div class="swiper-container" style="display: none;">
+	<div class="swiper-wrapper">
+
+	</div>
+	<!-- Add Pagination -->
+	<div class="swiper-pagination"></div>
+</div>
+<input type="hidden" id="appid" name="appid" value="">
+<input type="hidden" id="timestamp" name="timestamp" value="">
+<input type="hidden" id="nonceStr" name="nonceStr" value="">
+<input type="hidden" id="signature" name="signature" value="">
+</body>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/swiper.js"></script>
+<script src="layer/layer.js"></script>
+<script type="text/javascript" src="uploder/webuploader.js"></script>
+<script type="text/javascript" src="uploder/upload.js"></script>
+<script>
+	swiper1 = new Swiper('.swiper-container', {
+		pagination: {
+			el: '.swiper-pagination',
+			clickable: true,
+		},
+		initialSlide :0,
+		observer:true,//修改swiper自己或子元素时，自动初始化swiper
+		observeParents:true//修改swiper的父元素时，自动初始化swiper
+	});
+		var form = new FormData($("#form")[0]);
+		var url_m = "/qingmai/user/get_user_info.do";
+		$.post(url_m,{},function(user){
+			//console.log(user)
+		if(user.code == 0){
+			var page=1;
+			var str="";
+			var limit=100;
+			var url = "/qingmai/news/list.do";
+			$.post(url,{page:page,limit:limit},function(result){
+				//console.log(result)
+				if(result.code==0){
+					$.each(result.data, function(n,v) {
+						str += '<li>'+
+								'<div class="friend_info">'+
+								'<img src="'+v.headimgurl+'" class="friend_product"/>'+
+								'<div class="person_info">'+
+								'<span>'+v.userName+'</span>'+
+								'</div>'+
+								'<div class="arrow">';
+						if(getDateDiff(v.createTime)){
+							str += '<strong>'+getDateDiff(v.createTime)+'</strong>';
+						}else {
+							str += '<strong>刚刚</strong>';
+						}
+						str +='</div>'+
+								'<div style="clear:both"></div>'+
+								'<div class="friend_list clearfix">'+
+								'<p   onclick="fx('+v.id+')">'+v.detail+'</p><dl class="clearfix">';
+								if(v.image){
+									$.each(v.image, function(n,c) {
+										str += '<dd><img src="'+c+'" onclick="openModal('+v.id+','+n+')" style="width: auto;  height: auto;max-width: 100%;max-height: 100%;"/></dd>';
+									})
+								}
+						str +='</dl></div>'+
+								'</div>'+
+								'</li>' +
+                                '<div class="footer-detail" style="height: 35px">';
+						if(v.userId == user.data.id){
+							str +='<span onclick="del('+v.id+',this)" class="opt-btn" style="background: none;">删除</span>';
+						}
+						str +='<span onclick="dz('+v.id+',this)" class="icon-award opt-btn" style="float: right;margin-right: 5px;">'+v.goodNumber+'</span>' +
+                                '<span onclick="pl('+v.id+',this)" class="icon-comment opt-btn1" style="float: right"></span>' +
+                                '</div>' +
+								'<hr/>';
+
+					})
+					$("#clearfix").append(str);
+
+				}else{
+					layer.msg(result.msg);
+				}
+			})
+		}else {
+			layer.msg(user.msg);
+			setTimeout(function(){
+				window.location.href="/qingmai/app";
+			},1500)
+		}
+		//console.log(result)
+	})
+
+		function openModal(id,n) {
+			$('.swiper-wrapper').empty();;
+			var url = "/qingmai/news/select.do";
+			$.post(url, {newsId: id}, function (result) {
+				console.log(result)
+				$.each(result.data.image, function (n, c) {
+					var lb = '<div class="swiper-slide"><img src="' + c + '" width="100%" onclick="closeModal()"/></div>';
+					$('.swiper-wrapper').append(lb);
+				})
+			})
+			swiper1.slideTo(n);
+			layer.open({
+				type: 1,
+				shade: false,
+				title: false,
+				closeBtn:0,
+				skin: 'yourclass',
+				area: ['100%', '100%'], //宽高
+				skin: 'demo-class',
+				content: $(".swiper-container")
+			});
+		}
+		$("#add_dongtai").click(function () {
+			window.location.href="/qingmai/app/friend_add.html";
+			/*layer.open({
+				type: 1,
+				shade: false,
+				title: false,
+				closeBtn: 0,
+				skin: 'yourclass',
+				area: ['100%', '100%'], //宽高
+				content: $("#add")
+			});*/
+		})
+		function closeModal() {
+			layer.close(layer.index);
+		}
+//		//图片显示
+//		function getObjectURL(file) {
+//			var url = null
+//			if (window.createObjectURL != undefined) { // basic
+//				url = window.createObjectURL(file)
+//			} else if (window.URL != undefined) { // mozilla(firefox)
+//				url = window.URL.createObjectURL(file)
+//			} else if (window.webkitURL != undefined) { // webkit or chrome
+//				url = window.webkitURL.createObjectURL(file)
+//			}
+//			return url;
+//		}
+//		//点击上传
+//		$("#file").change(function () {
+//			if (checkFileExt(this.files[0].name) == false) {
+//				return false;
+//			} else {
+//				// FormData 对象
+//				var files = document.getElementById("file").files;
+//				for (var i = 0; i < files.length; i++) {
+//					form.append("file", files[i]);   // 文件对象
+//
+//					var objUrl = getObjectURL(files[i]);
+//					var size = files[i].size;
+//					if (size >= 1024000 * 10)bottomTip("图片超过10M了哦", 0);
+//					else {
+//						if (objUrl) {
+//							if (files.length <= 9) {
+//								if ($(".imgLoad").length >= 9) {
+//									$(".photo_add").remove();
+//									layer.msg("最多上传9 张图片");
+//									return false;
+//								} else {
+//									$(".photo_area").after($("<img src=" + objUrl + " class='imgLoad'/>"));
+//								}
+//							} else {
+//								layer.msg("最多上传9 张图片");
+//							}
+//
+//						}
+//					}
+//				}
+//			}
+//		});
+//		//判断格式
+//		function checkFileExt(filename) {
+//			var flag = false; //状态
+//			var arr = ["jpg", "png", "gif", "jpeg", "JPEG"];
+//			//取出上传文件的扩展名
+//			var index = filename.lastIndexOf(".");
+//			var ext = filename.substr(index + 1);
+//			//循环比较
+//			for (var i = 0; i < arr.length; i++) {
+//				if (ext == arr[i]) {
+//					flag = true; //一旦找到合适的，立即退出循环
+//					break;
+//				}
+//			}
+//			//条件判断
+//			if (!flag) {
+//				layer.msg("文件名不合法");
+//				return false;
+//			}
+//		}
+	$("#sub_btn").click(function () {
+		$("#jdt").show();
+		$("#sub_btn").attr("disabled","disabled");
+		var detail = $("#name").val();
+		form.append("detail", detail);
+		$.ajax({
+			url: '/qingmai/news/add.do',
+			type: 'POST',
+			data: form,
+			async: false,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				console.log(data)
+				if (data.code == 0) {
+					layer.msg('发布成功');
+					setTimeout(function () {
+						location.reload()
+					}, 1000)
+				} else {
+					layer.msg('发布失败');
+					setTimeout(function () {
+						location.reload()
+					}, 1000)
+				}
+				//;
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				layer.msg("服务器错误");
+			}
+		});
+	})
+		function getDateDiff(dateTimeStamp) {
+			var result;
+			var minute = 1000 * 60;
+			var hour = minute * 60;
+			var day = hour * 24;
+			var halfamonth = day * 15;
+			var month = day * 30;
+			var now = new Date().getTime();
+			var diffValue = now - dateTimeStamp;
+			if (diffValue < 0) {
+				return;
+			}
+			var monthC = diffValue / month;
+			var weekC = diffValue / (7 * day);
+			var dayC = diffValue / day;
+			var hourC = diffValue / hour;
+			var minC = diffValue / minute;
+			if (monthC >= 1) {
+				if (monthC <= 12)
+					result = "" + parseInt(monthC) + "月前";
+				else {
+					result = "" + parseInt(monthC / 12) + "年前";
+				}
+			}
+			else if (weekC >= 1) {
+				result = "" + parseInt(weekC) + "周前";
+			}
+			else if (dayC >= 1) {
+				result = "" + parseInt(dayC) + "天前";
+			}
+			else if (hourC >= 1) {
+				result = "" + parseInt(hourC) + "小时前";
+			}
+			else if (minC >= 1) {
+				result = "" + parseInt(minC) + "分钟前";
+			} else {
+				result = "刚刚";
+			}
+			return result;
+		};
+		function dz(newsId, obj) {
+			var url = "/qingmai/good/praise.do";
+			$.post(url, {newsId: newsId}, function (result) {
+				$(obj).text(result.data);
+				layer.msg(result.msg);
+			})
+		}
+	    function pl(newsId) {
+            window.location.href = "/qingmai/app/friend_pl.html?id=" + newsId;
+		}
+		function del(newsId) {
+			var url_m = "/qingmai/news/del.do";
+			$.post(url_m,{newsId:newsId},function(result){
+				console.log(result)
+				if(result.code == 0){
+					layer.msg(result.msg);
+					setTimeout(function(){
+						location.reload()
+					},1500)
+				}else {
+					layer.msg(result.msg);
+					setTimeout(function(){
+						location.reload()
+					},1500)
+				}
+
+			})
+		}
+
+		function fx(newsId) {
+			window.location.href = "/qingmai/app/friend_datile.html?id=" + newsId;
+		}
+
+</script>
+<script>
+
+ 
+
+
+</script>
+</html>

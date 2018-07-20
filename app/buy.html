@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>商城-确认购买</title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="css/swiper.css?v=3"/>
+	<link rel="stylesheet" href="css/LArea.css"/>
+	<link rel="stylesheet" href="css/style.css?v=2"/>
+
+</head>
+<body>
+<!-- 收货地址列表-->
+<div id="buyer_address_list" style="display:none;">
+	<div class="wrapper">
+		<a href="javascript:;" class="header_top"><span class="left_arrow"></span>收货地址</a>
+		<div class="header_address">
+			<a href="edit_address.html" class="add_address">添加新地址<span class="right_arrow"></span></a>
+		</div>
+		<div class="address_list">
+			<ul class="clearfix">
+				<li>
+					<span class="left_checked"></span>
+					<div class="address_content">
+						<div class="address_name">
+							<strong>刘明<span>(默认)</span></strong>
+							<b>15817966699</b>
+						</div>
+						<div class="address_detail">广东 深圳市 福田区 盛唐大厦西座2903</div>
+					</div>
+					<a href="javascript:;" class="address_edit"></a>
+				</li>
+				<li>
+					<span class="left_checked"></span>
+					<div class="address_content">
+						<div class="address_name">
+							<strong>刘明</strong>
+							<b>15817966699</b>
+						</div>
+						<div class="address_detail">广东 深圳市 福田区 盛唐大厦西座2903盛唐大厦西座2903</div>
+					</div>
+					<a href="javascript:;" class="address_edit"></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<!-- 收货地址列表 end-->
+<!-- 新增收货地址-->
+<div id="main" style="display:none;">
+	<div class="wrapper">
+		<a href="javascript:;" class="header_top"><span class="left_arrow"></span>新增收货地址</a>
+		<div class="address_add">
+			<ul class="clearfix">
+				<li>
+					<label>收货人:</label>
+					<input type="text" class="sex_name" placeholder="姓名"/>
+				</li>
+				<li>
+					<label>手&nbsp;&nbsp;&nbsp;机:</label>
+					<input type="text" class="phone_number" placeholder="号码"/>
+				</li>
+				<li>
+					<label>地&nbsp;&nbsp;&nbsp;区:</label>
+					<input type="text" class="area_address"/>
+					<input id="value1" type="hidden" value="20,234,504"/>
+				</li>
+				<li>
+					<label>地&nbsp;&nbsp;&nbsp;址:</label>
+					<input type="text" class="detail_address"/>
+				</li>
+				<li>
+					<label class="set_address">设置为默认地址</label>
+					<div class="switch" id="address_status">
+						<a href="javascript:void(0)" class="switch_btn left">
+							<span class="switch_bg"><em></em></span>
+							<i><em>选择按钮</em></i>
+						</a>
+					</div>
+				</li>
+			</ul>
+			<a href="javascript:;" class="sure_btn">确定</a>
+		</div>
+	</div>
+</div>
+<!-- 新增收货地址 end-->
+<!--主界面-->
+<div class="wrapper">
+	<div class="buy_header">
+		<div class="address">
+
+
+
+			<div class="address_line"></div>
+		</div>
+	</div>
+	<div class="buy_content clearfix">
+		<h2 class="clearfix"><span></span><strong>青脉果酒官方旗舰店</strong></h2>
+		<ul class="product_wrapper clearfix">
+		</ul>
+		<div class="buy_wrapper">
+			<div class="leave_message">
+				<div class="form-group">
+					<label class="set_address" style="width: 2.3rem;">是否使用积分</label>
+					<div class="switch" id="intargl_status">
+						<a href="javascript:void(0)" class="switch_btn left">
+							<span class="switch_bg"><em></em></span>
+							<i><em>选择按钮</em></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="total_order">
+			<div class="total_pay">
+
+				<span>共<em id="quantity_q"></em>件商品 合计:￥<strong id="productTotalPrice_q">0.00</strong></span>
+			</div>
+		</div>
+	</div>
+	<div class="pay">
+		<p>应付总额:￥<strong id='productTotalPrice'></strong><span>共<i id="quantity">0</i>件商品</span></p>
+		<a href="javascript:;" class="submit_btn" orderno="" price="">立即支付</a>
+	</div>
+</div>
+<!--主界面 end-->
+</body>
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/swiper.js"></script>
+<script src="layer/layer.js"></script>
+<script type="text/javascript" src="js/LAreaData1.js"></script>
+<script type="text/javascript" src="js/LAreaData2.js"></script>
+<script type="text/javascript" src="js/LArea.js"></script>
+<script type="text/javascript">
+	var text1,text2;
+	$(".product_wrapper li").each(function(){
+		$(this).children(".product").children(".buy_number").find(".reduce").on("click",function(){
+			var _this = $(this);
+			reduce(_this);
+		});
+		$(this).children(".product").children(".buy_number").find(".add").on("click",function(){
+			var _this = $(this);
+			reduce(_this);
+		})
+	});
+	var url_m = "/qingmai/user/get_user_info.do";
+	$.post(url_m,{},function(result){
+		if(result.code == 0){
+			var shipping = result.data.shippingId;
+			var shippingId = shipping ? shipping : -1;
+			$(".btn-buy-now").attr("shippingId",shippingId);
+		}else {
+
+			layer.msg(result.msg);
+			setTimeout(function(){
+				window.location.href="/qingmai/app";
+			},1500)
+		}
+		//console.log(result)
+	})
+	var useIntegral;
+	var url = "/qingmai/order/get_order_detail.do";
+	var count_price =0.00;
+	var count_sl =0;
+	var orderNo = GetQueryString("orderNo");
+	$.post(url,{orderNo:orderNo},function(result){
+		console.log(result)
+		var address = result.data.shippingVo;
+		var address_id = result.data.shippingId;
+		$(".submit_btn").attr("orderno",result.data.orderNo)
+		$(".submit_btn").attr("price",result.data.payment)
+		if(result.code == 0){
+			if(address_id==-1){
+				var address_on = '<div class="address_info clearfix" id="address_if" addre_id=""> <a href="javascript:;"><span></span>请填写收货地址</a> <span class="right_arrow"></span> </div>';
+			}else {
+				var address_on ='<div class="normal_address"> ' +
+								'<span class="address-icon"></span> ' +
+								'<div class="normal_phone"> ' +
+								'<div class="group-global"> ' +
+								'<strong>收货人：</strong> ' +
+								'<span>'+address.receiverName+'</span> ' +
+								'</div>' +
+								'<div class="telephone">'+address.receiverMobile+'</div>' +
+								'</div>' +
+								'<div class="receiver_address">' +
+								'<strong>收货地址:</strong>' +
+								'<span>'+address.receiverProvince+'&nbsp;'+address.receiverCity+'&nbsp;'+address.receiverDistrict+'&nbsp;'+address.receiverAddress+'</span> ' +
+								'</div>' +
+								'</div>';
+
+			}
+			$(".address").html(address_on);
+			$("#address_if").attr("addre_id",address_id);
+			$.each(result.data.orderItemVoList, function(n,v) {
+				var  li =  '<li> ' +
+							'<div class="product">' +
+							'<div class="product_list">' +
+							'<img src="'+v.productImage+'"> ' +
+							'<p>'+v.productName+'</p> ' +
+							'<div class="number clearfix"> ' +
+							'<strong>￥'+v.totalPrice+'</strong> ' +
+							'<span>*'+v.quantity+'</span> ' +
+							'</div> ' +
+							'<div style="clear:both"></div> ' +
+							'</div> ' +
+							'</div> ' +
+							'</li>';
+			$(".product_wrapper").append(li)
+			count_price += v.totalPrice;
+			count_sl += v.quantity;
+		})
+			$("#productTotalPrice").text(result.data.payment);
+			if(result.data.originalPrice!=null){
+				var originalPrice = '<em style="color: #c60a1e;">原价</em>:￥<strong id="originalPrice" style="color: #b3b3b3;text-decoration: line-through;">'+result.data.originalPrice+'</strong><br/>'
+				$(".total_pay").prepend(originalPrice);
+			}
+			$("#originalPrice").text(result.data.originalPrice);
+			$("#quantity").text(count_sl);
+			$("#productTotalPrice_q").text(result.data.payment);
+			$("#quantity_q").text(count_sl);
+		}else{
+			layer.msg(result.msg);
+			setTimeout(function(){
+				window.history.go(-1);
+			},1500)
+		}
+	//console.log(result)
+	})
+	$("#intargl_status").on("click",function(){
+		if(!$(this).children("a").hasClass("right")){
+			useIntegral = 1;
+			$(this).children("a").addClass("right");
+		}else{
+			useIntegral = 0;
+			$(this).children("a").removeClass("right");
+		}
+		var url = "/qingmai/order/update_order_integral.do";
+		$.post(url,{orderNo:orderNo,useIntegral:useIntegral},function(result){
+			//console.log(result.msg)
+			if(result.code==0){
+				$("#productTotalPrice").text(result.data);
+				$(".submit_btn").attr("price",result.data);
+				layer.msg(result.msg);
+			}else {
+				layer.msg(result.msg);
+			}
+
+		})
+
+	});
+	$(".submit_btn").click(function(){
+		var address_id = $("#address_if").attr("addre_id");
+		var orderNo=$(this).attr('orderno');
+		var payment=$(this).attr('price');
+		if(address_id==-1){
+			layer.msg("你还没有添加收货地址");
+			layer.open({
+				type: 2,
+				title: 'layer mobile页',
+				shadeClose: true,
+				shade: 0.8,
+				area: ['100%', '100%'],
+				content: 'add_address.html' //iframe的url
+			});
+			//window.location.href="add_address.html";
+			return false;
+		}else {
+			window.location.href="/qingmai/order/pay_order.do?orderNo="+orderNo+"&payment="+payment
+		}
+
+	})
+	$(".address").click(function(){
+		layer.open({
+			type: 2,
+			title: false,
+			closeBtn: 0, //不显示关闭按钮
+			shade: [0],
+			area: ['100%', '100%'],
+			anim: 2,
+			content: ['address.html?order_no='+orderNo+'', 'no'], //iframe的url，no代表不显示滚动条
+		});
+		//window.location.href="address.html";
+	})
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null)return  unescape(r[2]); return null;
+	}
+</script>
+
+</html>

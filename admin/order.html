@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>青脉果酒管理后台</title>
+  <link rel="stylesheet" href="src/css/layui.css">
+  <script src="js/jquery-2.0.0.min.js"></script>
+  <script src="src/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">青脉果酒管理后台</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <!--<ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>-->
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          管理员
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a id="pass_cs">重设密码</a></dd>
+
+          <!-- <dd><a href="">安全设置</a></dd> -->
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="javascript:;" id="logout">退了</a></li>
+    </ul>
+  </div>
+ <!--框架头部--> 
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item"><a class="" href="goods.html">商品管理</a></li>
+        <li class="layui-nav-item"><a href="member.html">用户管理</a></li>
+        <li class="layui-nav-item"><a href="manager.html">渠道经理管理</a></li>
+        <li class="layui-nav-item layui-nav-itemed" style="background-color: #4e5465;"><a href="order.html">订单管理</a></li>
+		<li class="layui-nav-item"><a href="news.html">动态管理</a></li>
+      </ul>
+    </div>
+  </div>
+<!--框架头部-->
+<div class="layui-body">
+
+	<div style="padding: 15px;">
+      <!-- 内容主体区域 star-->
+      <table class="layui-hide" id="test" lay-filter="demo"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">编辑</a>
+        <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a> -->
+    </script>
+      <!-- 内容主体区域 end-->
+	  
+	  <div class="layui-form" id="detail" style="display: none;margin: 80px 220px 150px;">
+		<span class="layui-breadcrumb" lay-separator="|">
+			<a href="">订单列表</a>
+			<a href="">订单详情</a>
+		</span>
+		<table class="layui-table">
+            <tbody>
+                <tr>
+                    <th colspan="4">基本信息</th>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>订单号：</strong></div></td>
+                    <td id="orderNo">orderNo</td>
+                    <td><div align="right"><strong>下单时间：</strong></div></td>
+                    <td id="createTime">createTime</td>
+                </tr>
+                <tr>
+                    <td width="18%"><div align="right"><strong>支付方式：</strong></div></td>
+                    <td width="34%" id="paymentTypeDesc">paymentTypeDesc</td><td><div align="right"><strong>支付状态：</strong></div></td>
+                    <td id="statusDesc">statusDesc</td>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>购买人：</strong></div></td>
+                    <td id="userName">userName</td>
+                    <td><div align="right"><strong>支付时间：</strong></div></td>
+                    <td id="paymentTime">paymentTime</td>
+                </tr>
+                <!-- <tr>
+                    <td><div align="right"><strong>配送方式：</strong></div></td>
+                    <td><span class="require-field">*</span> </td>
+                    <td><div align="right"><strong>配送费用：</strong></div></td>
+                    <td>0.00</td>
+                </tr> -->
+                <tr id="fh">
+                    
+                </tr>
+                <tr>
+                    <th colspan="4">收货人信息</th>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>收货人：</strong></div></td>
+                    <td id="receiverName"></td>
+                    
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>地址：</strong></div></td>
+                    <td id="address"></td>
+                    <td><div align="right"><strong>邮编：</strong></div></td>
+                    <td id="receiverZip"></td>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>电话：</strong></div></td>
+                    <td id="receiverPhone"></td>
+                    <td><div align="right"><strong>手机：</strong></div></td>
+                    <td id="receiverMobile"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="layui-table">
+			<thead>
+				<tr>
+					<th colspan="7" scope="col">商品信息</th>
+				</tr>
+				<tr>
+					<td scope="col"><div align="center"><strong>商品名称 [ 品牌 ]</strong></div></td>
+					<td scope="col"><div align="center"><strong>价格</strong></div></td>
+					<td scope="col"><div align="center"><strong>购买数量</strong></div></td>
+				</tr>
+			</thead>
+            <tbody id="shop_data">
+            </tbody>
+        </table>
+
+	</div>
+	</div>
+	
+</div>
+<!--框架底部 star---->
+
+<div class="layui-footer">
+<!-- 底部固定区域 -->
+© 青脉果酒管理后台 - 底部固定区域
+</div>
+</div>
+<div style="display: none;padding: 15px;" id="password">
+		<form class="layui-form" action="javascript:;" id="pass_form">
+          <div class="layui-form-item">
+            <label class="layui-form-label">旧密码</label>
+            <div class="layui-input-block">
+              <input type="password" name="passwordOld"  autocomplete="off"  class="layui-input" style="width:70%;">
+            </div>
+          </div>
+		  <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-block">
+              <input type="password" name="passwordNew" autocomplete="off" class="layui-input" style="width:70%;">
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <div class="layui-input-block">
+              <button class="layui-btn" id="sub_pass">立即提交</button>
+              <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+          </div>
+        </form>
+	  </div>
+<script>
+	$("#pass_cs").click(function(){
+		layer.open({
+			type: 1,
+			shade: false,
+			title: '重设密码',
+			skin: 'yourclass',
+			area: ['400px', '260px'], //宽高
+			content: $("#password")
+		});
+	})
+	$("#sub_pass").click(function(){
+		var url      = "/qingmai/manage/user/reset_password.do";
+		$.post(url,$("#pass_form").serialize(),function(result){
+			if(result.statues == 0){
+				layer.msg("修改成功");
+				setTimeout(function(){
+					 window.location.href = "login.html";
+				},1500)
+			}else {
+				layer.msg("修改失败");
+				setTimeout(function(){
+					window.location.reload();
+				},1500)
+			}
+		});
+	})
+	  //注销
+	$("#logout").click(function () {
+		var url      = "/qingmai/manage/user/logout.do";
+		$.post(url,{},function(result){
+			console.log(result);
+			if(result.code == 0){
+				layer.msg("用户退出");
+				setTimeout(function(){
+					 window.location.href = "login.html";
+				},1500)
+			}else {
+				layer.msg("用户异常");
+				setTimeout(function(){
+					window.location.reload();
+				},1500)
+			}
+		});
+	})
+</script>
+<script>
+  //JavaScript代码区域
+  layui.use('element', function(){
+    var element = layui.element;
+
+  });
+</script>
+<!--框架底部 end   footer-->
+
+<script>
+  layui.use(['table'], function(){
+    var laydate = table = layui.table;
+    table.render({
+      elem: '#test'
+      ,url: '/qingmai/manage/order/list.do' //数据接口
+      ,page: true //开启分页
+      ,cols: [[ //表头
+         {field: 'orderNo', title: '订单号'}
+        ,{field: 'content', title: '订单内容', sort: true}
+        ,{field: 'postage', title: '运费',width: 80,}
+        ,{field: 'status', title: '状态',templet: function(d){if(d.status==10){return "未付款";}else if(d.status==20){return "已付款";}else if(d.status==40){return "已发货";}else if(d.status==50){return "交易成功";}else if(d.status==60){return "交易关闭";}else if(d.status==00){return "已取消";}}}
+        ,{field: 'createTime', title: '下单时间', sort: true,templet: function(d){return getMyDate(d.createTime);}}
+        ,{field: 'paymentType',width: 250, title: '支付方式',sort: true,
+                templet: function(d){
+                    if(d.paymentType==0){
+                        return "特殊申请(无积分)(成为渠道经理)";
+                    }else if(d.paymentType==1){
+                        return "普通购物在线支付(无积分)";
+                    }else if(d.paymentType==2){
+                        return "特殊申请(有积分)";
+                    }else if(d.paymentType==3){
+                        return "普通购物在线支付(有积分)";
+                    }else if(d.paymentType==4){
+                        return "购买增加提成";
+                    }else if(d.paymentType==5){
+                        return "提成提现";
+                    }
+
+                }
+        }
+        ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo',title: '操作'}
+      ]]
+    });
+    //监听工具条
+    table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+      var data = obj.data //获得当前行数据
+              ,layEvent = obj.event; //获得 lay-event 对应的值
+      if(layEvent === 'detail'){
+        //layer.msg('查看操作');
+		layer.open({
+			type: 1,
+			shade: false,
+			title: false,
+			skin: 'yourclass',
+			area: ['100%', '100%'], //宽高
+			content: $("#detail")
+		  });
+		  var url = "/qingmai/manage/order/manage_detail.do";
+		  var url2 = "/qingmai/shipping/select.do";
+		  
+		$.post(url,{orderNo:data.orderNo},function(result){
+			$("#orderNo").text(result.data.orderNo);
+			$("#createTime").text(result.data.createTime);
+			$("#paymentTypeDesc").text(result.data.paymentTypeDesc);
+			$("#statusDesc").text(result.data.statusDesc);
+			$("#userName").text(result.data.userName);
+			$("#paymentTime").text(result.data.paymentTime);
+			if(result.data.status != 10){
+				var fh_html =   '<td><div align="right"><strong>快递单号：</strong></div></td>'+
+								'<td><input name="transportNo" type="text" id="transportNo" value="" placeholder="请输入物流单号"></td>'+
+								'<td><div align="right"><strong>发货操作</strong></div></td>'+
+								'<td><button class="btn" orderNo="'+data.orderNo+'" onclick="fhan(this)">发货</button></td>';
+				
+			}else{
+				var fh_html =   '<td><div align="right"><strong>快递单号：</strong></div></td>'+
+								'<td>'+data.transportNo+'</td>'+
+								'<td><div align="right"><strong>发货状态</strong></div></td>'+
+								'<td>'+data.statusDesc+'</td>';
+			}
+			$("#fh").html(fh_html);
+			$.post(url2,{shippingId:result.data.shippingId},function(result2){
+				if(result2.code==0){
+					$("#receiverName").text(result2.data.receiverName);
+					$("#address").text('['+result2.data.receiverProvince+'&nbsp;&nbsp;'+result2.data.receiverCity+'&nbsp;&nbsp;'+result2.data.receiverDistrict+'] '+result2.data.receiverAddress);
+					$("#receiverZip").text(result2.data.receiverZip);
+					$("#receiverPhone").text(result2.data.receiverPhone);
+					$("#receiverMobile").text(result2.data.receiverMobile);
+				}
+				
+			})
+			$.each(result.data.orderItemVoList, function(name, value) {
+				var tr = '<tr>'+
+							'<td>'+value.productName+'</td><td><div align="left">'+value.currentUnitPrice+'</div></td><td><div align="left">'+value.quantity+'</div></td>'+
+						'</tr>';
+				$("#shop_data").append(tr)
+			});
+			
+		})
+		//
+
+      } else if(layEvent === 'del'){
+        layer.confirm('真的删除行么', function(index){
+          obj.del(); //删除对应行（tr）的DOM结构
+          layer.close(index);
+          //向服务端发送删除指令
+        });
+      } else if(layEvent === 'edit'){
+        layer.msg('编辑操作');
+      }
+    });
+  });
+  function fhan(obj) {
+      var transportNo = $("#transportNo").val();
+      var orderNo = $(obj).attr('orderNo');
+
+      $.post("/qingmai/manage/order/set_order_status.do",{orderNo:orderNo,transportNo:transportNo},function(result){
+          layer.msg(result.msg);
+          setTimeout(function(){
+              window.location.reload();
+          },1500)
+
+      })
+  }
+function getMyDate(str){  
+    var oDate = new Date(str),  
+    oYear = oDate.getFullYear(),  
+    oMonth = oDate.getMonth()+1,  
+    oDay = oDate.getDate(),  
+    oHour = oDate.getHours(),  
+    oMin = oDate.getMinutes(),  
+    oSen = oDate.getSeconds(),  
+    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间  
+    return oTime;  
+}; 
+//补0操作
+function getzf(num){  
+    if(parseInt(num) < 10){  
+      num = '0'+num;  
+    }  
+    return num;  
+}
+	  
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>青脉-收货地址</title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="css/swiper.css?v=3"/>
+	<link rel="stylesheet" href="css/style.css?v=2"/>
+</head>
+<body class="bg">
+	<div class="wrapper">
+
+		<div class="header_address">
+			<a href="add_address.html" class="add_address">添加新地址<span class="right_arrow"></span></a>
+		</div>
+		<div class="address_list">
+			<ul class="clearfix">
+
+				<!--<li>
+					<span class="left_checked"></span>
+					<div class="address_content">
+						<div class="address_name">
+							<strong>刘明</strong>
+							<b>15817966699</b>
+						</div>
+						<div class="address_detail">广东 深圳市 福田区 盛唐大厦西座2903盛唐大厦西座2903</div>
+					</div>
+					<a href="javascript:;" class="address_edit"></a>
+				</li>-->
+			</ul>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/swiper.js"></script>
+<script type="text/javascript" src="js/main.js?v=6"></script>
+<script src="layer/layer.js"></script>
+<script type="text/javascript">
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null)return  unescape(r[2]); return null;
+	}
+function xz(obj) {
+	$this = $(obj);
+	var shippingId=$this.attr('ad_id');
+	var orderNo = GetQueryString("order_no");
+	if(!$this.hasClass("checked")){
+		$this.attr("checked","checked");
+		$this.addClass("checked").parents("li").siblings("li").children(".left_checked").removeAttr("checked");
+		$this.addClass("checked").parents("li").siblings("li").children(".left_checked").removeClass("checked");
+		var url_address = "/qingmai/shipping/default.do";
+		$.post(url_address,{shippingId:shippingId,orderNo:orderNo},function(result){
+			layer.msg(result.msg);
+			setTimeout(function(){
+				//window.location.reload();
+				parent.location.reload();
+			},1500)
+		})
+	}else{
+		$this.removeAttr("checked");
+		$this.removeClass("checked")
+	}
+}
+   var li=""
+   var url ="/qingmai/shipping/list.do";
+   $.post(url,{},function(result){
+   	console.log(result)
+	   $.each(result.data, function(n,v) {
+
+	   	if(v.checked == 1){
+			 li +=  '<li><span class="left_checked checked" onclick="xz(this)" ad_id="'+v.id+'"></span>';
+		}else {
+			 li +=  '<li><span class="left_checked" onclick="xz(this)" ad_id="'+v.id+'"></span>';
+		}
+
+		   li +=  '<div class="address_content">' +
+					'<div class="address_name">';
+		   if(v.checked == 1){
+			   li += '<strong>'+v.receiverName+'<span>(默认)</span></strong> ';
+		   }else {
+			   li += '<strong>'+v.receiverName+'<span></span></strong> ';
+		   }
+
+		   li +=   '<b>'+v.receiverMobile+'</b>' +
+					   '</div>' +
+					   '<div class="address_detail">'+v.receiverProvince+'&nbsp'+v.receiverCity+'&nbsp '+v.receiverDistrict+'&nbsp'+v.receiverAddress+'</div> ' +
+					   '</div> ' +
+					   '<a href="edit_address.html?address_id='+v.id+'" class="address_edit"></a> ' +
+					   '</li>';
+
+	   })
+	   $(".clearfix").append(li);
+   })
+</script>
+</html>

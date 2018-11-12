@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>青脉果酒管理后台</title>
+  <link rel="stylesheet" href="src/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">青脉果酒管理后台</div>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          管理员
+        </a>
+        <!--<dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>-->
+      </li>
+      <li class="layui-nav-item"><a href="">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed"><a class="" href="goods.html">商品管理</a></li>
+        <li class="layui-nav-item"><a href="member.html">用户管理</a></li>
+        <li class="layui-nav-item"><a href="manager.html">渠道经理管理</a></li>
+        <li class="layui-nav-item" style="background-color: #4e5465;"><a href="order.html">订单管理</a></li>
+      </ul>
+    </div>
+  </div>
+<!--框架头部-->
+<div class="layui-body">
+
+	<div style="padding: 15px;">
+      <!-- 内容主体区域 star-->
+		<div class="layui-form">
+		<span class="layui-breadcrumb" lay-separator="|">
+			<a href="">订单列表</a>
+			<a href="">订单详情</a>
+		</span>
+  <table class="layui-table">
+            <tbody>
+                <tr>
+                    <th colspan="4">基本信息</th>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>订单号：</strong></div></td>
+                    <td>orderNo</td>
+                    <td><div align="right"><strong>下单时间：</strong></div></td>
+                    <td>createTime</td>
+                </tr>
+                <tr>
+                    <td width="18%"><div align="right"><strong>支付方式：</strong></div></td>
+                    <td width="34%">paymentTypeDesc</td><td><div align="right"><strong>支付状态：</strong></div></td>
+                    <td>statusDesc</td>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>购买人：</strong></div></td>
+                    <td>userName</td>
+                    <td><div align="right"><strong>支付时间：</strong></div></td>
+                    <td>paymentTime</td>
+                </tr>
+                <!-- <tr>
+                    <td><div align="right"><strong>配送方式：</strong></div></td>
+                    <td><span class="require-field">*</span> </td>
+                    <td><div align="right"><strong>配送费用：</strong></div></td>
+                    <td>0.00</td>
+                </tr> -->
+                <tr>
+                    <td><div align="right"><strong>快递单号：</strong></div></td>
+                    <td colspan="3"><input name="invoice_no" type="text" value="" placeholder="请输入物流单号" required></td>
+                </tr>
+                <tr>
+                    <th colspan="4">收货人信息</th>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>收货人：</strong></div></td>
+                    <td>receiverName</td>
+                    
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>地址：</strong></div></td>
+                    <td>[
+                           receiverProvince&nbsp;&nbsp;receiverCity&nbsp;&nbsp;receiverDistrict                        ] receiverAddress</td>
+                    <td><div align="right"><strong>邮编：</strong></div></td>
+                    <td>receiverZip</td>
+                </tr>
+                <tr>
+                    <td><div align="right"><strong>电话：</strong></div></td>
+                    <td>receiverPhone</td>
+                    <td><div align="right"><strong>手机：</strong></div></td>
+                    <td>receiverMobile</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="layui-table">
+            <tbody><tr>
+                <th colspan="7" scope="col">商品信息</th>
+            </tr>
+            <tr>
+                <td scope="col"><div align="center"><strong>商品名称 [ 品牌 ]</strong></div></td>
+                <td scope="col"><div align="center"><strong>价格</strong></div></td>
+                <td scope="col"><div align="center"><strong>购买数量</strong></div></td>
+            </tr>
+            <tr>
+                <td>productName</td>
+                <td><div align="left">currentUnitPrice</div></td>
+                <td><div align="left">quantity</div></td>
+            </tr>
+            </tbody>
+        </table>
+
+</div>
+      <!-- 内容主体区域 end-->
+	</div>
+</div>
+<!--框架底部-->
+
+        <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © 青脉果酒管理后台 - 底部固定区域
+  </div>
+</div>
+<script src="js/jquery-2.0.0.min.js"></script>
+<script src="src/layui.js"></script>
+<script>
+  //JavaScript代码区域
+  layui.use('element', function(){
+    var element = layui.element;
+
+  });
+  var url = "/qingmai/manage/order/manage_detail.do";
+		$.post(url,{orderNo:orderNo},function(result){
+		
+			$("input[name='name']").val(result.data.name);
+			$("input[name='subtitle']").val(result.data.subtitle);
+			$("input[name='mainImage']").val(result.data.mainImage);
+			$("input[name='subImages']").val(result.data.subImages);
+			$("input[name='price']").val(result.data.price);
+			//$('#type option:selected').val(result.data.name);
+			$("input[name='stock']").val(result.data.stock);
+			$("#content").html(result.data.detail)
+			$("#goods_id").val(result.data.id);
+			if(result.data.type==0){
+				$('.layui-anim-upbit').find("dd:eq(0)").addClass("layui-this");
+				$('.layui-anim-upbit').find("dd:eq(1)").removeClass("layui-this");
+				$('.layui-anim-upbit').find("dd:eq(2)").removeClass("layui-this");
+				$(".layui-select-title").find("input").val("全部");
+			}
+			if(result.data.type==1){
+				$('.layui-anim-upbit').find("dd:eq(1)").addClass("layui-this");
+				$('.layui-anim-upbit').find("dd:eq(0)").removeClass("layui-this");
+				$('.layui-anim-upbit').find("dd:eq(2)").removeClass("layui-this");
+				$(".layui-select-title").find("input").val("普通商品");
+			}
+			if(result.data.type==2){
+				$('.layui-anim-upbit').find("dd:eq(2)").addClass("layui-this");
+				$('.layui-anim-upbit').find("dd:eq(1)").removeClass("layui-this");
+				$('.layui-anim-upbit').find("dd:eq(0)").removeClass("layui-this");
+				$(".layui-select-title").find("input").val("大客户商品");
+			}
+			
+			
+		});
+</script>
+
+
+</body>
+</html>

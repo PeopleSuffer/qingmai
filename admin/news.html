@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>青脉果酒管理后台</title>
+  <link rel="stylesheet" href="src/css/layui.css">
+  <script src="js/jquery-2.0.0.min.js"></script>
+  <script src="src/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">青脉果酒管理后台</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <!--<ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>-->
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          管理员
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a id="pass_cs">重设密码</a></dd>
+
+          <!-- <dd><a href="">安全设置</a></dd> -->
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="javascript:;" id="logout">退了</a></li>
+    </ul>
+  </div>
+ <!--框架头部--> 
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item"><a class="" href="goods.html">商品管理</a></li>
+        <li class="layui-nav-item"><a href="member.html">用户管理</a></li>
+        <li class="layui-nav-item"><a href="manager.html">渠道经理管理</a></li>
+        <li class="layui-nav-item"><a href="order.html">订单管理</a></li>
+		<li class="layui-nav-item layui-nav-itemed" style="background-color: #4e5465;"><a href="news.html">动态管理</a></li>
+      </ul>
+    </div>
+  </div>
+<!--框架头部-->
+<div class="layui-body">
+
+	<div style="padding: 15px;">
+      <!-- 内容主体区域 star-->
+      <table class="layui-hide" id="test" lay-filter="demo"></table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看评论</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+	<div class="layui-collapse" lay-filter="test" style="display: none;margin:75px 35px 0 215px;border: none;"id="commentVoList">
+		<ul class="layui-timeline" id="pl_list">
+			
+		</ul>  
+	</div>
+
+        <style>
+            .layui-layer{background: #b2b2b2;}
+        </style>
+        <img src="" id="img_url" style="margin:15% 0 0 15%;display: none;">
+      <!-- 内容主体区域 end-->
+	</div>
+</div>
+<!--框架底部 star---->
+<div class="layui-footer">
+<!-- 底部固定区域 -->
+© 青脉果酒管理后台 - 底部固定区域
+</div>
+</div>
+<div style="display: none;padding: 15px;" id="password">
+<form class="layui-form" action="javascript:;" id="pass_form">
+  <div class="layui-form-item">
+	<label class="layui-form-label">旧密码</label>
+	<div class="layui-input-block">
+	  <input type="password" name="passwordOld"  autocomplete="off"  class="layui-input" style="width:70%;">
+	</div>
+  </div>
+  <div class="layui-form-item">
+	<label class="layui-form-label">新密码</label>
+	<div class="layui-input-block">
+	  <input type="password" name="passwordNew" autocomplete="off" class="layui-input" style="width:70%;">
+	</div>
+  </div>
+  <div class="layui-form-item">
+	<div class="layui-input-block">
+	  <button class="layui-btn" id="sub_pass">立即提交</button>
+	  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	</div>
+  </div>
+</form>
+</div>
+<script>
+	$("#pass_cs").click(function(){
+		layer.open({
+			type: 1,
+			shade: false,
+			title: '重设密码',
+			skin: 'yourclass',
+			area: ['400px', '260px'], //宽高
+			content: $("#password")
+		});
+	})
+	$("#sub_pass").click(function(){
+		var url      = "/qingmai/manage/user/reset_password.do";
+		$.post(url,$("#pass_form").serialize(),function(result){
+			if(result.statues == 0){
+				layer.msg("修改成功");
+				setTimeout(function(){
+					 window.location.href = "login.html";
+				},1500)
+			}else {
+				layer.msg("修改失败");
+				window.location.reload();
+			}
+		});
+	})
+	  //注销
+	$("#logout").click(function () {
+		var url      = "/qingmai/manage/user/logout.do";
+		$.post(url,{},function(result){
+			console.log(result);
+			if(result.code == 0){
+				layer.msg("用户退出");
+				setTimeout(function(){
+					 window.location.href = "login.html";
+				},1500)
+			}else {
+				layer.msg("用户异常");
+				window.location.reload();
+			}
+		});
+	})
+</script>
+<script>
+  //JavaScript代码区域
+  layui.use('element', function(){
+    var element = layui.element;
+
+  });
+</script>
+<!--框架底部 end   footer-->
+<script>
+  layui.use(['table'], function(){
+    var laydate = table = layui.table;
+    table.render({
+      elem: '#test'
+      ,url: '/qingmai/manage/news/list.do' //数据接口
+      ,page: true //开启分页
+      ,cols: [[ //表头
+         {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+        ,{field: 'userName', title: '用户名'}
+        ,{field: 'createTimeVo', title: '发布时间', sort: true}
+        ,{field: 'detail', title: '内容'}
+        ,{field: 'images', title: '图片',templet: function(d){return '<img onclick="djfd(this)" src="'+d.images+'" width=100 height=100 />';}}
+        ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo',title: '操作'}
+      ]]
+    });
+    //监听工具条
+    table.on('tool(demo)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+      var data = obj.data //获得当前行数据
+              ,layEvent = obj.event; //获得 lay-event 对应的值
+      if(layEvent === 'detail'){
+		layer.open({
+			type: 1,
+			shade: false,
+			title: false,
+			skin: 'yourclass',
+			area: ['100%', '100%'], //宽高
+			content: $("#commentVoList")
+		  });
+		  $.each(data.commentVoList, function(name, value) {
+				var li ='<li class="layui-timeline-item">'+
+							'<i class="layui-icon layui-timeline-axis"></i>'+
+							'<div class="layui-timeline-content layui-text">'+
+								'<h3 class="layui-timeline-title">'+value.creatTimeForVo+'</h3>'+
+								'<p>'+value.content+'</p>'+
+							'</div>'+
+						'</li>';
+				$("#pl_list").append(li)
+			});
+			
+      } else if(layEvent === 'del'){
+        layer.confirm('确定要删除这条动态', function(index){
+			var url      = "/qingmai/manage/news/delete.do";
+			$.post(url,{newsId:data.id},function(result){
+			console.log(result)
+				if(result.statues == 0){
+					layer.msg("删除成功");
+					obj.del();
+				}else {
+					layer.msg("删除失败");
+					setTimeout(function(){
+						 window.location.reload();
+					},1500)
+				}
+			});
+        });
+      } else if(layEvent === 'edit'){
+        layer.msg('编辑操作');
+      }
+    });
+  });
+  function djfd(obj) {
+      layer.open({
+          type: 1,
+          shade: false,
+          title: false,
+          closeBtn: 0,
+          skin: 'yourclass',
+          area: ['50%', '95%'], //宽高
+          content: $("#img_url")
+      });
+      var img = $(obj);
+      $("#img_url").attr("src",img.attr("src"))
+  }
+  $("#img_url").click(function () {
+      layer.closeAll();
+  })
+		 function getMyDate(str){  
+            var oDate = new Date(str),  
+            oYear = oDate.getFullYear(),  
+            oMonth = oDate.getMonth()+1,  
+            oDay = oDate.getDate(),  
+            oHour = oDate.getHours(),  
+            oMin = oDate.getMinutes(),  
+            oSen = oDate.getSeconds(),  
+            oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间  
+            return oTime;  
+        }; 
+        //补0操作
+      function getzf(num){  
+          if(parseInt(num) < 10){  
+              num = '0'+num;  
+          }  
+          return num;  
+      }
+	  
+</script>
+
+</body>
+</html>

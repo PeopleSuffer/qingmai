@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title></title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="css/swiper.css?v=3"/>
+	<link rel="stylesheet" href="css/style.css?v=8"/>
+</head>
+<style>
+	.swiper-container {
+		width: 100%;
+		height: 100%;
+	}
+	.swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		background: #000;
+		/* Center slide text vertically */
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+	}
+.friend_content .friend_list dl dd{
+	width:2.94rem;
+	height:2.9rem;
+	float:left;
+	margin: 0 0.05rem 0.24rem 0;
+}
+</style>
+<body>
+
+<div class="wrapper">
+	<div class="friend_content" style="overflow:visible;">
+		<ul class="clearfix" id ="clearfix">
+
+		</ul>
+	</div>
+	<section data-role="outer" label="Powered by 135editor.com" style="font-size:16px;">
+		<section style="border: 0px none; box-sizing: border-box;">
+			<section style="text-align:center;">
+				<section style="display:inline-block;">
+					<img style="max-width: 100%;"src="images/0.gif" id="tzgzh">
+				</section>
+			</section>
+		</section>
+		<p>
+			<br>
+		</p>
+	</section>
+</div>
+<div class="swiper-container" style="display: none;">
+	<div class="swiper-wrapper">
+
+	</div>
+	<!-- Add Pagination -->
+	<div class="swiper-pagination"></div>
+</div>
+</body>
+<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/swiper.js"></script>
+<script src="layer/layer.js"></script>
+<script>
+	swiper1 = new Swiper('.swiper-container', {
+		pagination: {
+			el: '.swiper-pagination',
+			clickable: true,
+		},
+		initialSlide :0,
+		observer:true,//修改swiper自己或子元素时，自动初始化swiper
+		observeParents:true//修改swiper的父元素时，自动初始化swiper
+	});
+	$("#tzgzh").click(function () {
+		window.location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU3MzMyNDc5NA==&scene=124#wechat_redirect";
+	})
+	var newsId = GetQueryString("id")
+	var url = "/qingmai/news/select.do";
+	var str='';
+	var url_m = "/qingmai/user/get_user_info.do";
+	$.post(url_m,{},function(user) {
+		if(user.code == 0){
+			$.post(url, {newsId: newsId}, function (result) {
+				console.log(result)
+				var v = result.data;
+				$('title').html(v.detail);
+				if (result.code == 0) {
+					str += '<li>' +
+							'<div class="friend_info">' +
+							'<div style="clear:both"></div>' +
+							'<div class="friend_list clearfix">' +
+							'<p>' + v.detail + '</p>';
+					if (v.image) {
+						$.each(v.image, function (n, c) {
+							str += '<dl class=""><dd><img src="' + c + '" onclick="openModal(' + v.id + ',' + n + ')" /></dd></dl>';
+						})
+					}
+					str += '</div>' +
+							'</div>' +
+							'</li>';
+
+					$("#clearfix").append(str)
+				} else {
+					layer.msg(result.msg);
+				}
+			})
+		}else {
+			layer.msg(user.msg);
+			setTimeout(function(){
+				window.location.href="/qingmai/app";
+			},1500)
+		}
+	})
+	function openModal(id,n) {
+
+		$('.swiper-wrapper').empty();;
+		var url = "/qingmai/news/select.do";
+		$.post(url, {newsId: id}, function (result) {
+			console.log(result)
+			$.each(result.data.image, function (n, c) {
+				var lb = '<div class="swiper-slide"><img src="' + c + '" width="100%" onclick="closeModal()"/></div>';
+				$('.swiper-wrapper').append(lb);
+			})
+		})
+		swiper1.slideTo(n);
+		layer.open({
+			type: 1,
+			shade: false,
+			title: false,
+			closeBtn:0,
+			skin: 'yourclass',
+			area: ['100%', '100%'], //宽高
+			skin: 'demo-class',
+			content: $(".swiper-container")
+		});
+	}
+	function closeModal() {
+		layer.close(layer.index);
+	}
+	function GetQueryString(name) {
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null)return  unescape(r[2]); return null;
+	}
+</script>
+
+</html>

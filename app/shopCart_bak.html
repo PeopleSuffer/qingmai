@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>商城-购物车</title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="css/swiper.css?v=3"/>
+	<link rel="stylesheet" href="css/style.css?v=2"/>
+	<link rel="stylesheet" href="../admin/src/css/layui.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div class="buy_content shopCart clearfix">
+			<div class="shop_detail">
+				<h2 class="clearfix"><input type="checkbox" checked="checked" class="buy_checked  checked "/><span></span><strong>青脉果酒官方旗舰店</strong></h2>
+				<ul class="product_wrapper clearfix">
+					
+				</ul>
+			</div>
+			<!-- <div class="shop_detail">
+				<h2 class="clearfix"><input type="checkbox" checked="checked" class="buy_checked  checked "/><span></span><strong>青脉果酒官方旗舰店</strong></h2>
+				<ul class="product_wrapper clearfix">
+					<li>
+						<div class="product">
+							<div class="product_list">
+								<input type="checkbox" checked="checked" class="checked"/>
+								<img src="images/detail/product_pic.png"/>
+								<p>怀水豆特别版6*125ml</p>
+								<div class="number clearfix">
+									<strong>￥100.00</strong>
+									<span>*1</span>
+								</div>
+								<div style="clear:both"></div>
+							</div>
+							<div class="buy_number clearfix">
+								<div class="buy_total">
+									<span class="reduce"  data-role="100">-</span>
+									<input type="text" class="txt" value="0" data-role="100"/>
+									<span class="add" data-role="100">+</span>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div> -->
+		</div>
+		<div class="pay">
+			<p class="all_check"><input type="checkbox" class="checked" checked="checked"/>全选</p>
+			<p class="pay_total">应付总额:￥<strong id='productTotalPrice'></strong><span>共<i class="count_number" id="quantity"></i>件商品</span></p>
+			<a href="my_order.html" class="submit_btn">提交订单</a>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/swiper.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script src="layer/layer.js"></script>
+<script type="text/javascript">
+	var url = "http://120.27.247.68:8080/qingmai/cart/list.do";
+	var count_price =0.00;
+	var count_sl =0;;
+	$.post(url,{},function(result){
+		//layer.msg(result.msg);
+		console.log(result)
+		if(result.code == 0){
+			$.each(result.data.cartProductVoList, function(n,v) {
+				var li =  '<li><div class="product">' +
+						'<div class="product_list">' +
+							'<input type="checkbox" checked="checked" class="checked"/>' +
+							'<img src="images/detail/product_pic.png"/> ' +
+							'<p>'+v.productName+'</p>' +
+							'<div class="number clearfix">' +
+							'<strong>￥'+v.productPrice+'</strong>' +
+							'<span>*'+v.quantity+'</span>' +
+						'</div>' +
+						'<div style="clear:both"></div> ' +
+					'</div> ' +
+					'<div class="buy_number clearfix"> ' +
+						'<div class="buy_total"> ' +
+							'<span class="reduce" onclick="reduce(this)"  data-role="'+v.productPrice+'" data-id="'+v.productId+'">-</span> ' +
+							'<input type="text" class="txt" value="'+v.quantity+'" data-role="'+v.productPrice+'"/> ' +
+							'<span class="add"  onclick="add(this)" data-role="'+v.productPrice+'" data-id="'+v.productId+'">+</span> ' +
+						'</div> ' +
+					'</div> ' +
+				'</div></li>';
+				$(".product_wrapper").append(li)
+				count_price += v.productTotalPrice;
+				count_sl += v.quantity;
+			})
+			console.log(count_sl)
+			$("#productTotalPrice").text(count_price);
+			$("#quantity").text(count_sl);
+		}else{
+			layer.msg(result.msg);
+			setTimeout(function(){
+				 window.history.go(-1);
+			},1500)
+		}
+		//console.log(result)
+	})
+
+	/*计算总钱数*/
+	function total() {
+		var S=0;
+		var N=0;
+		$.each($('.pay'), function() {
+			var _this=($(this));
+			var s=0;
+			var n1=0;
+			var $ul_total=$(this).siblings('.shopCart').find("h2").children("input");
+			/*$(this).siblings('.shopCart').find("ul").find("li").each(function(){
+				if($(this).find(".product_list").children("input [type='checkbox']").attr('checked',"checked")){
+					var num = $(this).children(".product").children(".buy_number").children(".buy_total")
+							.find("input").val();
+					var price = $(this).children(".product").children(".buy_number").children(".buy_total")
+							.find("input").attr("data-role");
+					s=s+(parseInt(num)*parseInt(price));
+					n1=n1+parseInt(num);
+					$('.pay').children(".pay_total").find("strong").html(s);
+					$('.pay').children(".pay_total").find("i").html(n1);
+				}
+
+			});*/
+			$.each($(this).siblings('.shopCart').find("ul").find(".txt"), function(i) {
+				if($(this).attr('checked',"checked")){
+					var num =$(this).parents(".product").children(".buy_number").children(".buy_total")
+							.find("input").val();
+					var price = $(this).parents(".product").children(".buy_number").children(".buy_total")
+							.find("input").attr("data-role");
+					s=s+(parseInt(num)*parseInt(price));
+					n1=n1+parseInt(num);
+				}
+				$('.pay').children(".pay_total").find("strong").html(s);
+				$('.pay').children(".pay_total").find("i").html(n1);
+			});
+		});
+	}
+
+	/*子项全选*/
+	$("ul li input[type='checkbox']").change(function(){
+		checkbox($(this));
+		var $ul_input=$(this).parents('ul').prev('h2').find('input');
+		if($(this).parents('ul').find("input[checked='checked']").length==$(this).parents("ul").children('li').length){
+			$ul_input.attr("checked","checked");
+			$ul_input.addClass("checked");
+		}else{
+			$ul_input.removeAttr("checked");
+			$ul_input.removeClass("checked");
+		}
+		sum();
+	});
+	/*给单选框或复选框添加样式*/
+	function checkbox($this){
+		if($this.attr('type')=="checkbox"){
+			if ($this.attr('checked')=="checked") {
+				$this.removeAttr("checked");
+				$this.removeClass("checked");
+			}else{
+				$this.attr("checked","checked");
+				$this.addClass("checked");
+			}
+		}
+		total();
+	}
+	/*底部全选  子项全选*/
+	$('.shop_detail').children("h2").children("input").change(function(){
+		var $list_input=$(this).parents('h2').siblings('ul').find('input[type=checkbox]');
+		if ($(this).attr("checked")==undefined) {
+			$list_input.attr("checked","checked");
+			$list_input.addClass("checked");
+		}else{
+			$list_input.removeAttr("checked");
+			$list_input.removeClass("checked");
+
+		}
+		checkbox($(this));
+		sum();
+	});
+	function sum(){
+		if ($("ul.product_wrapper input[checked='checked']").length==$("li").length) {
+			$(".pay input").attr("checked","checked");
+			$(".pay input").addClass("checked");
+		}else{
+			$(".pay input").removeAttr("checked");
+			$(".pay input").removeClass("checked");
+		}
+	}
+
+	/*底部全选*/
+	$('.pay input').change(function(){
+		if ($(this).attr("checked")=="checked") {
+			$("ul li input[type='checkbox']").removeAttr("checked");
+			$("ul li input[type='checkbox']").removeClass("checked");
+			$(".shop_detail h2").children("input").removeAttr("checked");
+			$(".shop_detail h2").children("input").removeClass("checked");
+			$('.pay').find(".pay_total").find("strong").text(0);
+			$('.pay').find(".pay_total").find("i").text(0);
+		}else{
+			$("ul li input[type='checkbox']").attr("checked","checked");
+			$("ul li input[type='checkbox']").addClass("checked");
+			$(".shop_detail h2").children("input").attr("checked","checked");
+			$(".shop_detail h2").children("input").addClass("checked");
+
+		}
+		checkbox($(this));
+	});
+
+	$(function(){
+		total();
+	});
+
+</script>
+</html>

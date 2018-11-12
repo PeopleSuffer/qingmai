@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.QingMai.dao.CommentMapper" >
+  <resultMap id="BaseResultMap" type="com.QingMai.pojo.Comment" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="news_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="product_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="kind" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, news_id, product_id, kind, content, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from qingmai_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from qingmai_comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.QingMai.pojo.Comment" >
+    insert into qingmai_comment (id, user_id, news_id, 
+      product_id, kind, content, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{newsId,jdbcType=INTEGER}, 
+      #{productId,jdbcType=INTEGER}, #{kind,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      now(), now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.QingMai.pojo.Comment" >
+    insert into qingmai_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="newsId != null" >
+        news_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="kind != null" >
+        kind,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="newsId != null" >
+        #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        now(),
+      </if>
+      <if test="updateTime != null" >
+        now(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.QingMai.pojo.Comment" >
+    update qingmai_comment
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="newsId != null" >
+        news_id = #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="kind != null" >
+        kind = #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        now(),
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.QingMai.pojo.Comment" >
+    update qingmai_comment
+    set user_id = #{userId,jdbcType=INTEGER},
+      news_id = #{newsId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      kind = #{kind,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByNewsKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from qingmai_comment
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByProductKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from qingmai_comment
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByNewsId" parameterType="java.lang.Integer" >
+    delete from qingmai_comment
+    where news_id = #{newsId,jdbcType=INTEGER}
+  </delete>
+</mapper>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<title>青脉-用户中心</title>
+	<link rel="stylesheet" href="css/common.css"/>
+	<link rel="stylesheet" href="css/swiper.css?v=3"/>
+	<link rel="stylesheet" href="css/style.css?v=2"/>
+	<style>
+		.form-group {
+			margin-bottom: 15px;
+		}
+		.form-control {
+			display: block;
+			width: 93%;
+			height: 34px;
+			padding: 6px 12px;
+			font-size: 14px;
+			line-height: 1.42857143;
+			color: #555;
+			background-color: #fff;
+			background-image: none;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+			-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+			-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+			transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+		}
+		.btn-info:hover {
+			color: #fff;
+			background-color: #31b0d5;
+			border-color: #269abc;
+		}
+		.btn:hover, .btn:focus, .btn.focus {
+			color: #333;
+			text-decoration: none;
+		}
+		.btn-info {
+			color: #fff;
+			background-color: #5bc0de;
+			border-color: #46b8da;
+		}
+		.btn {
+			display: inline-block;
+			padding: 6px 12px;
+			margin-bottom: 0;
+			font-size: 14px;
+			font-weight: normal;
+			line-height: 1.42857143;
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: middle;
+			-ms-touch-action: manipulation;
+			touch-action: manipulation;
+			cursor: pointer;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			background-image: none;
+			border: 1px solid transparent;
+			border-radius: 4px;
+		}
+		input, button, select, textarea {
+			font-family: inherit;
+			font-size: inherit;
+			line-height: inherit;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="order_header">
+			<a href="javascript:;" class="header_picture">
+				<img id="headimgurl" src=""/>
+			</a>
+			<div class="person_detail">
+				<h1 id="nickname"></h1>
+				<p>积分:<em id="integral"></em></p>
+				<p>提现金额:<em id="price"></em></p>
+				<p>邀请码:<em id="haveCode"></em></p>
+			</div>
+		</div>
+		<div class="person_center">
+			<h2>
+				<span>我的订单</span>
+				<a href="my_order.html?orderStatus=70">查看全部订单<span></span></a>
+			</h2>
+			<ul class="clearfix">
+				<li>
+					<a href="my_order.html?orderStatus=10" class="detail_pay">
+						<strong></strong>
+						<span>待付款</span>
+					</a>
+				</li>
+				<li>
+					<a href="my_order.html?orderStatus=20" class="detail_send">
+						<strong></strong>
+						<span>待发货</span>
+					</a>
+				</li>
+				<li>
+					<a href="my_order.html?orderStatus=40" class="detail_receive">
+						<strong></strong>
+						<span>待收货</span>
+					</a>
+				</li>
+				<li>
+					<a href="my_order.html?orderStatus=50" class="had_detail">
+						<strong></strong>
+						<span>已完成</span>
+					</a>
+				</li>
+			</ul>
+			<ol class="clearfix">
+				<li>
+					<a href="address.html" class="receiver_address">
+						<span class="icon receiver_icon"></span>
+						<strong>收货地址</strong>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;" class="application_agent">
+						<span class="icon agent_icon"></span>
+						<strong>申请代理</strong>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:;" id="bdyqm">
+						<span class="icon text_icon"></span>
+						<strong>绑定邀请码</strong>
+					</a>
+				</li>
+			</ol>
+		</div>
+		<footer class="footer">
+			<ul class="clearfix">
+				<li>
+					<a href="index.html">
+						<span class="icon home_icon"></span>
+						<strong>首页</strong>
+					</a>
+				</li>
+				<li>
+					<a href="friend.html">
+						<span class="icon friend_icon"></span>
+						<strong>圈子</strong>
+					</a>
+				</li>
+				<li>
+					<a href="person.html"  class="active">
+						<span class="icon my_icon"></span>
+						<strong>我的</strong>
+					</a>
+				</li>
+			</ul>
+		</footer>
+		<div class="form-group" id="yaoqingma" style="display: none;position: relative;top: 50%;transform: translateY(-50%);">
+			<input type="text" class="form-control" id="code"  placeholder="请输入邀请码">
+			<button type="submit" class="btn btn-info" id="sub_btn" style="width: 100%;margin-top:10%;">提交认证</button>
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/swiper.js"></script>
+<script src="layer/layer.js"></script>
+<script>
+	$(".application_agent").click(function () {
+		var url= "/qingmai/order/create_special_order.do";
+		$.post(url,{},function(result){
+			if(result.code==0){
+				layer.msg(result.msg)
+				window.location.href="buy.html?orderNo="+result.data.orderNo;
+			}else {
+				layer.msg(result.msg)
+			}
+		})
+	})
+	var url_m = "/qingmai/user/get_user_info.do";
+	$.post(url_m,{},function(result){
+		console.log(result)
+		if(result.code == 0){
+			$("#nickname").text(result.data.nickname)
+			$("#headimgurl").attr("src",result.data.headimgurl)
+			$("#integral").text(result.data.integral)
+
+			if(result.data.commission){
+
+				$("#price").text(result.data.commission)
+			}else {
+
+				$("#price").text(0)
+			}
+			if(result.data.haveCode){
+
+				$("#haveCode").text(result.data.haveCode)
+			}else {
+
+				$("#haveCode").text("暂无邀请码")
+			}
+
+			//$(".btn-buy-now").attr("shippingId",shippingId);
+		}else {
+			layer.msg(result.msg);
+			setTimeout(function(){
+				window.location.href="/qingmai/app";
+			},1500)
+
+		}
+	})
+	$("#bdyqm").click(function () {
+		layer.open({
+			type: 1,
+			shade: false,
+			title: false,
+			skin: 'auto',
+			closeBtn:1,
+			area: ['90%', '30%'], //宽高
+			content: $("#yaoqingma")
+		});
+	})
+	$("#sub_btn").click(function () {
+		var code = $("#code").val();
+		$.post('/qingmai/user/write_invitation_code.do',{code:code},function(result){
+			console.log(result)
+			if(result.code == 0){
+				layer.msg(result.msg)
+				setTimeout(function(){
+					layer.closeAll();
+				},1500)
+
+			}else {
+				layer.msg(result.msg)
+				setTimeout(function(){
+					layer.closeAll();
+				},1500)
+
+			}
+
+		})
+
+	})
+</script>
+
+</html>
